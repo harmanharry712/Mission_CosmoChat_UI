@@ -1,10 +1,14 @@
 // src/Chat.js
 import React, { useState, useEffect } from 'react';
 
-const Chat = () => {
-  const [messages, setMessages] = useState([]);
+const Chat = ({ onTerminate }) => {
+  const [messages, setMessages] = useState(JSON.parse(localStorage.getItem('messages')) || []);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('messages', JSON.stringify(messages));
+  }, [messages]);
 
   useEffect(() => {
     if (input) {
@@ -18,11 +22,31 @@ const Chat = () => {
     }
   }, [input]);
 
+  useEffect(() => {
+    if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  const sendNotification = (message) => {
+    if (Notification.permission === 'granted') {
+      new Notification('New message from ReX Chat', {
+        body: message,
+      });
+    }
+  };
+
   const handleSend = () => {
     if (input.trim()) {
       setMessages([...messages, { text: input, sender: 'user' }]);
+      sendNotification(input);
       setInput('');
     }
+  };
+
+  const handleTerminate = () => {
+    localStorage.removeItem('messages');
+    onTerminate();
   };
 
   return (
@@ -44,6 +68,7 @@ const Chat = () => {
         />
         <button style={styles.sendButton} onClick={handleSend}>Send</button>
       </div>
+      <button style={styles.terminateButton} onClick={handleTerminate}>End Chat</button>
     </div>
   );
 };
@@ -109,6 +134,17 @@ const styles = {
     border: 'none',
     backgroundColor: '#61dafb',
     color: '#fff',
+  },
+  terminateButton: {
+    margin: '10px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+    border: 'none',
+    backgroundColor: '#ff4d4d',
+    color: '#fff',
+    alignSelf: 'center',
   },
 };
 
