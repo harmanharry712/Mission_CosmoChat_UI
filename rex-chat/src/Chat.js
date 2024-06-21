@@ -51,6 +51,10 @@ const Chat = ({ onTerminate }) => {
 
   return (
     <div style={styles.chatContainer}>
+      <div style={styles.header}>
+        <h2>ReX Chat</h2>
+        <button style={styles.terminateButton} onClick={handleTerminate}>Terminate Chat</button>
+      </div>
       <div style={styles.messagesContainer}>
         {messages.map((msg, index) => (
           <div key={index} style={msg.sender === 'user' ? styles.userMessage : styles.botMessage}>
@@ -68,7 +72,6 @@ const Chat = ({ onTerminate }) => {
         />
         <button style={styles.sendButton} onClick={handleSend}>Send</button>
       </div>
-      <button style={styles.terminateButton} onClick={handleTerminate}>End Chat</button>
     </div>
   );
 };
@@ -79,6 +82,14 @@ const styles = {
     flexDirection: 'column',
     height: '100vh',
     backgroundColor: '#f7f7f7',
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '10px 20px',
+    borderBottom: '1px solid #ccc',
+    backgroundColor: '#fff',
   },
   messagesContainer: {
     flex: 1,
@@ -117,6 +128,7 @@ const styles = {
     display: 'flex',
     padding: '10px',
     borderTop: '1px solid #ccc',
+    backgroundColor: '#fff',
   },
   input: {
     flex: 1,
@@ -136,7 +148,6 @@ const styles = {
     color: '#fff',
   },
   terminateButton: {
-    margin: '10px',
     padding: '10px 20px',
     fontSize: '16px',
     cursor: 'pointer',
@@ -144,7 +155,6 @@ const styles = {
     border: 'none',
     backgroundColor: '#ff4d4d',
     color: '#fff',
-    alignSelf: 'center',
   },
 };
 
